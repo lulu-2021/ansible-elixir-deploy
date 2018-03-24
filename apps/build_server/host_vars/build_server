@@ -1,0 +1,5 @@
+---
+hostname: buildserver
+domains:
+  # first domain is the main domain
+  - buildserver

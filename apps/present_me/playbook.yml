@@ -14,7 +14,7 @@
         - ../../public_keys/*.pub
 
     - role: user/0.0.1
-      username: admin
+      username: deployer
       sudoer: True
       authorized_key_paths:
         - ../../public_keys/*.pub
@@ -26,23 +26,17 @@
     - role: imagemagick/0.0.1
 
     - role: user/0.0.1
-      username: phoenix
+      username: deployer
       authorized_key_paths:
         - ../../public_keys/*.pub
-        - ./circle_ci.pub
 
     - role: configure-postgresql/0.0.1
-      username: phoenix
-      database_name: phoenix
+      username: deployer
+      database_name: deployer
 
     - role: phoenix-app/0.0.1
-      username: phoenix
-      app_name: phoenix_website
-
-    - role: lets_encrypt/0.0.1
-      app_name: phoenix_website
-      lets_encrypt_contact_email: admin@lunarlogic.io
-      lets_encrypt_environment: production
+      username: deployer
+      app_name: present_me
 
     # This must be the last one role to log info about successfully provisioned machine.
     - role: provision_log/0.0.1

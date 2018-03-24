@@ -14,7 +14,7 @@
         - ../../public_keys/*.pub
 
     - role: user/0.0.1
-      username: admin
+      username: steve
       sudoer: True
       authorized_key_paths:
         - ../../public_keys/*.pub
@@ -26,10 +26,9 @@
     - role: install_nodejs/0.0.1
 
     - role: user/0.0.1
-      username: builder
+      username: steve
       authorized_key_paths:
         - ../../public_keys/*.pub
-        - ./circle_ci.pub
 
     # This must be the last one role to log info about successfully provisioned machine.
     - role: provision_log/0.0.1
