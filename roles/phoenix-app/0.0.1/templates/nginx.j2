@@ -1,62 +1,33 @@
-# Based on:
-# http://www.phoenixframework.org/docs/serving-your-application-behind-a-proxy
 
-upstream {{ app_name }} {
-  server 127.0.0.1:8888 max_fails=5 fail_timeout=60s;
+upstream presenter {
+  server 127.0.0.1:5010 max_fails=5 fail_timeout=60s;
 }
 
-server {
-  listen      80;
-  server_name {{ domains | join(" ") }};
-
-  # allows Let's Encrypt verification request on HTTP
-  location ~ /.well-known {
-    root /var/www;
-    allow all;
-  }
-
-  location / {
-    return 301 https://{{ domains[0] }}$request_uri;
-  }
+# The following map statement is required
+# if you plan to support channels. See https://www.nginx.com/blog/websocket-nginx/
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    '' close;
 }
+server{
 
-server {
-  listen 443 ssl;
+    listen 80;
+    server_name {{ domains | join(" ") }};
+    # server_name *.p2u.cloud;  # NB Uncomment this in production!
 
-  server_name {{ domains[0] }};
+    location / {
+	client_max_body_size 999M;
+        try_files $uri @proxy;
+    }
 
-  client_max_body_size 999M;
-
-  gzip on;
-  gzip_types text/plain text/css text/xml application/x-javascript application/xml application/rss+xml
-    application/atom+xml text/javascript application/javascript application/json text/mathml image/svg+xml;
-
-  include "snippets/{{ app_name }}/*.conf";
-
-  location / {
-    allow all;
-
-    # Proxy Headers
-    proxy_http_version 1.1;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $http_host;
-    proxy_set_header X-Cluster-Client-Ip $remote_addr;
-
-    # The Important Websocket Bits!
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-
-    proxy_pass http://{{ app_name }};
-  }
-}
-
-server {
-  listen 443 ssl;
-  server_name {{ domains | join(" ") }};
-
-  include "snippets/{{ app_name }}/*.conf";
-
-  location / {
-    return 301 https://{{ domains[0] }}$request_uri;
-  }
+    location @proxy {
+        include proxy_params;
+        proxy_redirect off;
+        proxy_pass http://presenter;
+        # The following two headers need to be set in order
+        # to keep the websocket connection open. Otherwise you'll see
+        # HTTP 400's being returned from websocket connections.
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+    }
 }
