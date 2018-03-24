@@ -11,6 +11,7 @@
     state: present
   tags: [erlang]
 - apt: name=unzip
+
 - get_url:
     url: https://github.com/elixir-lang/elixir/releases/download/v{{elixir_version}}/Precompiled.zip
     dest: /usr/local/src/elixir-{{elixir_version}}.zip

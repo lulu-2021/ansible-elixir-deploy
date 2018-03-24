@@ -25,6 +25,10 @@
 
     - role: imagemagick/0.0.1
 
+    - role: install_nodejs/0.0.1
+
+    - role: install_bower/0.0.1
+
     - role: user/0.0.1
       username: deployer
       authorized_key_paths:
