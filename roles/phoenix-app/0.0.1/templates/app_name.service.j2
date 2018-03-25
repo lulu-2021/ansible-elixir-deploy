@@ -9,6 +9,7 @@ After=network.target
 Type=simple
 User={{ username }}
 Group={{ username }}
+EnvironmentFile=/home/{{ username }}/config/{{ username }}.conf
 WorkingDirectory=/home/{{ username }}/{{ app_name }}/
 ExecStart=/home/{{ username }}/{{ app_name }}/bin/{{ app_name }} foreground
 KillMode=process
