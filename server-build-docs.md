@@ -1,5 +1,10 @@
 ## Build and App server creation with ansible
 
+#### These instructions relate to `internal servers`
+
+* IF building these on the internet - SECURITY steps need to be taken 
+* Install and configure `UFW` - firewall! (TODO: consider adding this to ansible)
+
 #### BUILD SERVER
 
 * Created a completely NEW buildserver vm on the FreeBSD host

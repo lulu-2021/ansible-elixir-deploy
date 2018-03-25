@@ -1,6 +1,7 @@
 
 upstream presenter {
-  server 127.0.0.1:5010 max_fails=5 fail_timeout=60s;
+  #server 127.0.0.1:5010 max_fails=5 fail_timeout=60s;
+  server [::]:5010 max_fails=5 fail_timeout=60s;  
 }
 
 # The following map statement is required
